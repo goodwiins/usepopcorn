@@ -1,23 +1,14 @@
-import React from "react";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import StartRating from './StartRating';
 
-import ReactDOM from "react-dom/client";
-// import ReactDOM from 'react-dom';
 
-import App from "./App";
-import "./index.css";
-
-// REACT 18
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <StartRating MaxRating={5}/>
+  <StartRating size = {48} color = "red" messages = {[ "Terrible", "Bad", "Okay", "Good", "Great"]} defaultValue = {3} />
   </React.StrictMode>
 );
-
-// REACT 17
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
