@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -49,10 +49,42 @@ const tempWatchedData = [
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+const key = 'd66e8508';
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const query = 'batman';
+
+ useEffect(function(){
+  async function fetchMovie() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${key}&s=${query}`
+      );
+
+    
+      const data = await res.json();
+      if (data.Response === "False") throw new Error("Movie not found");
+      setMovies(data.Search);
+      setError("");
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        console.log(err.message);
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchMovie();
+ },[])
+
 
   return (
     <>
@@ -62,9 +94,14 @@ export default function App() {
       </NavBar>
 
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+      <Box>
+      {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
+      {isLoading && <Loader />}
+          {!isLoading && !error && (
+            <MovieList movies={movies}  />
+          )}
+          {error && <ErrorMessage message={error} />}
+      </Box>
 
         <Box>
           <WatchedSummary watched={watched} />
@@ -82,6 +119,20 @@ function NavBar({ children }) {
       {children}
     </nav>
   );
+}
+
+function ErrorMessage({message}){
+  return (
+    <p className="error">
+    <span role="img">🚨</span> {message}
+    </p>
+  )
+}
+
+function Loader(){
+  return (
+   <p className="loader">loading...</p>
+      )
 }
 
 function Logo() {

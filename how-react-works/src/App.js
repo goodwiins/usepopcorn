@@ -26,6 +26,8 @@ export default function App() {
   );
 }
 
+
+
 function Tabbed({ content }) {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -39,10 +41,15 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent 
+        item={content.at(activeTab)}
+        key={content.at(activeTab).summary}/>
       ) : (
         <DifferentContent />
       )}
+
+
+  
     </div>
   );
 }
@@ -61,11 +68,23 @@ function Tab({ num, activeTab, onClick }) {
 function TabContent({ item }) {
   const [showDetails, setShowDetails] = useState(true);
   const [likes, setLikes] = useState(0);
-
+  console.log("rendering");
   function handleInc() {
     setLikes(likes + 1);
   }
+  function handleUndo() {
+    setShowDetails(true);
+    setLikes(0);
+  }
 
+  function handleUndolate(){
+    setTimeout(handleUndo,2000)
+  }
+  function handleSuperLink()
+  {
+    setLikes(likes => likes + 3)
+    console.log(likes)
+  }
   return (
     <div className="tab-content">
       <h4>{item.summary}</h4>
@@ -79,13 +98,13 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleSuperLink}>+++</button>
         </div>
       </div>
 
       <div className="tab-undo">
-        <button>Undo</button>
-        <button>Undo in 2s</button>
+        <button onClick={handleUndo}>Undo</button>
+        <button onClick={handleUndolate}>Undo in 2s</button>
       </div>
     </div>
   );
@@ -98,3 +117,23 @@ function DifferentContent() {
     </div>
   );
 }
+const initialFriends = [
+  {
+    id: 118836,
+    name: "Clark",
+    image: "https://i.pravatar.cc/48?u=118836",
+    balance: -7,
+  },
+  {
+    id: 933372,
+    name: "Sarah",
+    image: "https://i.pravatar.cc/48?u=933372",
+    balance: 20,
+  },
+  {
+    id: 499476,
+    name: "Anthony",
+    image: "https://i.pravatar.cc/48?u=499476",
+    balance: 0,
+  },
+];
