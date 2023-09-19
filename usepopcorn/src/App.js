@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
-
-
+import { useLocalStoageState } from "./useLocalStoageState";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 const key = 'd66e8508';
@@ -23,7 +22,14 @@ export default function App() {
   }
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+    // localStorage.setItem("watched",JSON.stringify([...watched,movie]))
+    
   }
+
+
+  useEffect(function(){
+    localStorage.setItem("watched",JSON.stringify(watched))
+  },[watched]);
   // function handleDeleteWatched(id) {
   //   setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   // }
